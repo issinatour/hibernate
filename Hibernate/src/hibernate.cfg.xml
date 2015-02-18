@@ -1,13 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
-		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory name="Conexion">
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.password">natour</property>
         <property name="hibernate.connection.url">jdbc:mysql://natour.myqnapcloud.com/QUIZIT</property>
         <property name="hibernate.connection.username">issam</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLMyISAMDialect</property>
+        <property name="hibernate.search.autoregister_listeners">false</property>
+        <mapping resource="model/Test.hbm.xml" />
+        <mapping resource="model/Preguntas.hbm.xml" />
+        <mapping resource="model/Respuestas.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-feb-2015 17:40:20 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="model.Preguntas" table="PREGUNTAS" catalog="QUIZIT">
+        <id name="idPreguntas" type="java.lang.Integer">
+            <column name="id_preguntas" />
+            <generator class="identity" />
+        </id>
+        <property name="titulo" type="string">
+            <column name="titulo" length="120" not-null="true" />
+        </property>
+        <property name="categoria" type="string">
+            <column name="categoria" length="25" not-null="true" />
+        </property>
+        <property name="imagen" type="string">
+            <column name="imagen" length="65535" not-null="true" />
+        </property>
+        <property name="fidPreguntas" type="int">
+            <column name="fid_preguntas" not-null="true" />
+        </property>
+        <property name="tipo" type="string">
+            <column name="tipo" length="65535" />
+        </property>
+        <property name="consejo" type="string">
+            <column name="Consejo" length="65535" />
+        </property>
+    </class>
+</hibernate-mapping>

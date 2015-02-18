@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-feb-2015 17:40:20 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="model.Test" table="TEST" catalog="QUIZIT">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="40" />
+        </property>
+        <property name="casilla" type="java.lang.Integer">
+            <column name="casilla" />
+        </property>
+        <property name="puntuacion" type="java.lang.Float">
+            <column name="puntuacion" precision="12" scale="0" />
+        </property>
+        <property name="monedas" type="java.lang.Integer">
+            <column name="monedas" />
+        </property>
+        <property name="diamantes" type="java.lang.Integer">
+            <column name="diamantes" />
+        </property>
+        <property name="experiencia" type="java.lang.Float">
+            <column name="experiencia" precision="12" scale="0" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="10" />
+        </property>
+    </class>
+</hibernate-mapping>

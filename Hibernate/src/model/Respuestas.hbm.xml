@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 18-feb-2015 17:40:20 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="model.Respuestas" table="RESPUESTAS" catalog="QUIZIT">
+        <id name="idRespuestas" type="java.lang.Integer">
+            <column name="id_respuestas" />
+            <generator class="identity" />
+        </id>
+        <property name="respuesta" type="string">
+            <column name="respuesta" length="120" />
+        </property>
+        <property name="solucion" type="java.lang.Boolean">
+            <column name="solucion" />
+        </property>
+        <property name="idPreguntas" type="java.lang.Integer">
+            <column name="id_preguntas" />
+        </property>
+    </class>
+</hibernate-mapping>
