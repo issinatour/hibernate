@@ -3,7 +3,7 @@
 "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory name="Conexion">
+  <session-factory>
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.password">natour</property>
@@ -15,4 +15,6 @@
         <mapping resource="model/Preguntas.hbm.xml" />
         <mapping resource="model/Respuestas.hbm.xml" />
     </session-factory>
+    
+  
 </hibernate-configuration>
