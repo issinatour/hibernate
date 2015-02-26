@@ -18,14 +18,7 @@ public class Preguntas implements java.io.Serializable {
 	public Preguntas() {
 	}
 
-	public Preguntas(String titulo, String categoria, String imagen,
-			int fidPreguntas) {
-		this.titulo = titulo;
-		this.categoria = categoria;
-		this.imagen = imagen;
-		this.fidPreguntas = fidPreguntas;
-	}
-
+	
 	public Preguntas(String titulo, String categoria, String imagen,
 			int fidPreguntas, String tipo, String consejo) {
 		this.titulo = titulo;

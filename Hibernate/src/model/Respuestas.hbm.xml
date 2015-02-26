@@ -8,6 +8,7 @@
             <column name="id_respuestas" />
             <generator class="identity" />
         </id>
+        
         <property name="respuesta" type="string">
             <column name="respuesta" length="120" />
         </property>

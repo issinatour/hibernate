@@ -12,8 +12,18 @@ import javax.swing.JToolBar;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -25,51 +35,50 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import clases.HibernateHelper;
 import clases.SessionFactoryUtil;
+
 import javax.swing.JCheckBox;
+import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
-public class VentanaInsertar {
-
+public class VentanaInsertar extends JFrame {
+JButton btnInsertarrespuesta;
 	private JFrame frame;
 	private JTextField texttitulopregunta;
 	private JTextField textcategoriapregunta;
 	private JTextField textnombreimagenpregunta;
-	private JTextField textforeignpregunta;
 	private JTextField texttipopregunta;
 	private JTextField textconsejopregunta;
+	JScrollPane scrollPanePreguntas ;
+	private SessionFactory sesion;
+	private JTextField TEXTOrespuesta;
+	private JTextField textField;
+	JCheckBox checkTrueFalse;
 	
-	 private SessionFactory sesion;
-	 private JTextField TEXTOrespuesta;
-	 private JTextField textField;
-	 JCheckBox checkTrueFalse;
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaInsertar window = new VentanaInsertar();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	JScrollPane scrollPaneRespuestas;
+	HibernateHelper modelo;
+	 JButton btnInsertarpregunta;
 	public VentanaInsertar() {
 		initialize();
+		modelo= new HibernateHelper();
 	}
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 513, 381);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+		setBounds(100, 100, 513, 381);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.NORTH);
-		panel.setLayout(new GridLayout(0, 2, 0, 0));
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		
+		JPanel panel_17 = new JPanel();
+		tabbedPane.addTab("Crear-insertar", null, panel_17, null);
+		panel_17.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JPanel panel_1 = new JPanel();
-		frame.getContentPane().add(panel_1, BorderLayout.CENTER);
+		panel_17.add(panel_1);
 		panel_1.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		JPanel panel_2 = new JPanel();
@@ -149,38 +158,13 @@ public class VentanaInsertar {
 		panel_4.add(panel_11);
 		panel_11.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JLabel lblForeginpreguntas = new JLabel("ForeginIdPreguntas");
-		lblForeginpreguntas.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_11.add(lblForeginpreguntas);
-		
-		textforeignpregunta = new JTextField();
-		textforeignpregunta.setText("1");
-		panel_11.add(textforeignpregunta);
-		textforeignpregunta.setColumns(10);
-		
 		JPanel panel_12 = new JPanel();
 		panel_4.add(panel_12);
 		
-		JButton btnInsertarpregunta = new JButton("InsertarPregunta");
+		 btnInsertarpregunta = new JButton("InsertarPregunta");
 		panel_12.add(btnInsertarpregunta);
 		
-		btnInsertarpregunta.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-
-					String titulo=texttitulopregunta.getText();
-					String categoria = textcategoriapregunta.getText();
-					String nombreImagen = textnombreimagenpregunta.getText();
-					String tipo = texttipopregunta.getText();
-					String consejo = textconsejopregunta.getText();
-					int idpreguntaforeign = Integer.valueOf(textforeignpregunta.getText());
-					
-					addQuestion(titulo,categoria,nombreImagen,idpreguntaforeign,tipo,consejo);
 		
-
-					
-				}
-
-			});
 		
 		JPanel panel_3 = new JPanel();
 		panel_1.add(panel_3);
@@ -215,82 +199,168 @@ public class VentanaInsertar {
 		panel_14.add(lblNewLabel_1);
 		
 		 checkTrueFalse = new JCheckBox("si o no");
-		panel_14.add(checkTrueFalse);
+		 panel_14.add(checkTrueFalse);
+		 
+		 JPanel panel_15 = new JPanel();
+		 panel_5.add(panel_15);
+		 panel_15.setLayout(new GridLayout(1, 0, 0, 0));
+		 
+		 JLabel lblIdpregunta = new JLabel("idPREGUNTA");
+		 lblIdpregunta.setHorizontalAlignment(SwingConstants.CENTER);
+		 panel_15.add(lblIdpregunta);
+		 
+		 textField = new JTextField();
+		 textField.setText("5");
+		 panel_15.add(textField);
+		 textField.setColumns(10);
+		 
+		 JPanel panel_16 = new JPanel();
+		 panel_5.add(panel_16);
+		 
+		  btnInsertarrespuesta = new JButton("InsertarRespuesta");
+		 panel_16.add(btnInsertarrespuesta);
+		 
+		 JPanel panel = new JPanel();
+		 tabbedPane.addTab("Ver datos", null, panel, null);
+		 panel.setLayout(new BorderLayout(0, 0));
+		 
+		 JPanel panel_18 = new JPanel();
+		 panel.add(panel_18, BorderLayout.CENTER);
+		 panel_18.setLayout(new GridLayout(1, 0, 0, 0));
+		 
+		 JPanel panel_19 = new JPanel();
+		 panel_18.add(panel_19);
+		 panel_19.setLayout(new BorderLayout(0, 0));
+		 
+		  scrollPanePreguntas = new JScrollPane();
+		 panel_19.add(scrollPanePreguntas, BorderLayout.CENTER);
+		 
+		 JLabel lblPreguntas = new JLabel("Preguntas");
+		 lblPreguntas.setHorizontalAlignment(SwingConstants.CENTER);
+		 panel_19.add(lblPreguntas, BorderLayout.NORTH);
+		 
+		 JPanel panel_20 = new JPanel();
+		 panel_18.add(panel_20);
+		 panel_20.setLayout(new BorderLayout(0, 0));
+		 
+		  scrollPaneRespuestas = new JScrollPane();
+		 panel_20.add(scrollPaneRespuestas, BorderLayout.CENTER);
+		 
+		 JLabel lblRespuestas = new JLabel("Respuestas");
+		 lblRespuestas.setHorizontalAlignment(SwingConstants.CENTER);
+		 panel_20.add(lblRespuestas, BorderLayout.NORTH);
 		
-		JPanel panel_15 = new JPanel();
-		panel_5.add(panel_15);
-		panel_15.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JLabel lblIdpregunta = new JLabel("idPREGUNTA");
-		lblIdpregunta.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_15.add(lblIdpregunta);
-		
-		textField = new JTextField();
-		textField.setText("5");
-		panel_15.add(textField);
-		textField.setColumns(10);
-		
-		JPanel panel_16 = new JPanel();
-		panel_5.add(panel_16);
-		
-		JButton btnInsertarrespuesta = new JButton("InsertarRespuesta");
-		panel_16.add(btnInsertarrespuesta);
-		
-		btnInsertarrespuesta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				String titulo=TEXTOrespuesta.getText();
-				boolean seleccion=false;
-				 boolean selected = checkTrueFalse.isSelected();
-			        if (selected) {
-			        	seleccion=true;
-			            System.out.println("Check box state is selected.");
-			        } else {
-			        	seleccion=false;
-			            System.out.println("Check box state is not selected.");
-			        }
-				
-				
-				int idpreguntaforeign = Integer.valueOf(textField.getText());
-				
-				addRespuestas(titulo,seleccion,idpreguntaforeign);
-	
-
-				
-			}
-
-		});
 		
 		 sesion = SessionFactoryUtil.getSessionFactory();
+		 
+		 Thread cargarTablas = new cargarTablas();
+		 cargarTablas.start();
 	}
 	
 	
-	
-	public void addQuestion( String titulo, String categoria,String imagen,int fidPreguntas,String tipo,String consejo){
-		 Session session = sesion.openSession();
-		 Transaction tx = session.beginTransaction();
-		 
-
-		 Preguntas question = new Preguntas(titulo,categoria,imagen,fidPreguntas,tipo,consejo
-				 );
-		 
-		 session.save(question);
-		 tx.commit();
-		 session.close();
-		 }
-	
-	
-	 public void addRespuestas(String respuestas,boolean solucion,int idpregunta){
+	class cargarTablas extends Thread {
+		
+		public cargarTablas(){
 			
-		 Session session = sesion.openSession();
-		 Transaction tx = session.beginTransaction();
-		 
-		 Respuestas respuesta = new Respuestas(respuestas,solucion,idpregunta);
-			 
-		 
-		 session.save(respuesta);
-		 tx.commit();
-		 session.close();
-	 }
+		}
+		public void run(){
+			 cargar();
+		}
+		public void cargar(){
+			
+			DefaultTableModel modeloT = new DefaultTableModel();
+			JTable tablapreguntas = new JTable(modeloT);
+			
+			modeloT.addColumn("idpregunta");
+			modeloT.addColumn("titulo");
+			modeloT.addColumn("categoria");
+			modeloT.addColumn("imagen");
+			modeloT.addColumn("tipo");
+			modeloT.addColumn("consejo");
+			
+			DefaultTableModel modeloTRespuestas = new DefaultTableModel();
+			JTable tablarespuestas = new JTable(modeloTRespuestas);
+			modeloTRespuestas.addColumn("idRespuestas");
+			modeloTRespuestas.addColumn("respuesta");
+			modeloTRespuestas.addColumn("solucion");
+			modeloTRespuestas.addColumn("idPreguntas");
+			
+	
+			List<Preguntas> Listapreguntas  = modelo.getQuestion();
+			List<Respuestas> Listarespuestas  = modelo.getRespuestas();
+			
+		
+			for (Preguntas s : Listapreguntas) {
+				  Object[] o = new Object[6];
+				  o[0] = s.getIdPreguntas();
+				  o[1] = s.getTitulo();
+				  o[2] = s.getCategoria();
+				  o[3] = s.getImagen();
+				  o[4] = s.getTipo();
+				  o[5] = s.getConsejo();
+				  
+				  modeloT.addRow(o);
+				}
+			
+			
+			for (Respuestas s : Listarespuestas) {
+				  Object[] o = new Object[4];
+				  o[0] = s.getIdRespuestas();
+				  o[1] = s.getRespuesta();
+				  o[2] = s.getSolucion();
+				  o[3] = s.getIdPreguntas();
 
+				  modeloTRespuestas.addRow(o);
+				}
+			
+			scrollPanePreguntas.setViewportView(tablapreguntas);
+			scrollPaneRespuestas.setViewportView(tablarespuestas);
+		}
+	}
+	
+	public void ReCargarTablas(){
+		 Thread cargarTablas = new cargarTablas();
+		 cargarTablas.start();
+	}
+	 
+	 public JButton getbtninsertarPregunta (){
+		 return btnInsertarpregunta;
+	 }
+	 
+	 
+	 public JTextField gettexttitulopregunta(){
+		 return texttitulopregunta;
+	 }
+	 public JTextField gettextcategoriapregunta(){
+		 return textcategoriapregunta;
+	 }
+	 
+	 public JTextField gettextnombreimagenpregunta(){
+		 return textnombreimagenpregunta;
+	 }
+	 public JTextField gettexttipopregunta(){
+		 return texttipopregunta;
+	 }
+	 public JTextField gettextconsejopregunta(){
+		 return textconsejopregunta;
+	 }
+	 
+
+	 
+	 
+	 public JButton getbtnInsertarrespuesta(){
+		 return btnInsertarrespuesta;
+	 }
+	 
+	 public JTextField getTEXTOrespuesta(){
+		 return TEXTOrespuesta;
+	 }
+	 
+	 public JCheckBox getcheckTrueFalse(){
+		 return checkTrueFalse;
+	 }
+	 
+	 public JTextField getIDPREGUNTA(){
+		 return textField;
+	 }
 }
