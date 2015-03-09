@@ -3,7 +3,10 @@ package controller;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import model.Preguntas;
 import clases.HibernateHelper;
 
 
@@ -13,6 +16,21 @@ public class Controller {
 	VentanaInsertar view;
 	HibernateHelper model;
 	
+	
+	//PREGUNTA
+	 Integer idPreguntas;
+	 String titulo;
+	 String categoria;
+	 String imagen;
+	 int fidPreguntas;
+	 String tipo;
+	 String consejo;
+	 
+	 Preguntas mipregunta;
+	////
+	
+	int iddepregunta=0;
+	int idderespuesta = 0;
 	
 	Controller() {
 		
@@ -24,6 +42,11 @@ public class Controller {
 		
 		actionSavePregunta();
 		actionsaveRespuesta();
+		borrarPregunta();
+		borrarRespuesta();
+		
+		view.getTablePreguntas().addMouseListener(ListenertablaPreguntas);
+		view.getTableRespuestas().addMouseListener(ListenertablaRespuestas);
 	}
 
 
@@ -57,8 +80,8 @@ public class Controller {
 				
 				model.addQuestion(titulo,categoria,nombreImagen,idpreguntaforeign,tipo,consejo);
 
-	
-				
+	            //cargo el id de la pregunta introducida en el id de la respuesta (fk)
+	            view.getIDPREGUNTA().setText(String.valueOf(model.getLastQuestion().getIdPreguntas()));
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
@@ -108,6 +131,121 @@ public class Controller {
 		});
 	}
 
+	MouseAdapter ListenertablaPreguntas = new MouseAdapter() {
+		public void mouseClicked(MouseEvent e) {
+			String[] nombresdefila = new String[8];
 
+			int fila = view.getTablePreguntas().rowAtPoint(e
+					.getPoint());
+			int columna = view.getTablePreguntas().columnAtPoint(e
+					.getPoint());
+			if ((fila > -1) && (columna > -1)) {
+
+				for (int i = 0; i < view.getTablePreguntas().getColumnCount(); i++) {
+					nombresdefila[i] = String.valueOf(view.getTablePreguntas().getValueAt(fila, i));
+	
+
+				}
+				iddepregunta=Integer.valueOf(nombresdefila[0]);
+				 titulo=nombresdefila[1];
+				 categoria=nombresdefila[2];
+				 imagen=nombresdefila[3];
+				 fidPreguntas=0;
+				 tipo=nombresdefila[4];
+				 consejo=nombresdefila[5];
+				
+				mipregunta=new Preguntas(titulo,categoria,imagen,fidPreguntas,tipo,consejo);
+				
+				System.out.println(mipregunta.getTitulo());
+			}
+
+		}
+
+	};
+	
+	MouseAdapter ListenertablaRespuestas = new MouseAdapter() {
+		public void mouseClicked(MouseEvent e) {
+			String[] nombresdefila = new String[8];
+
+			int fila = view.getTableRespuestas().rowAtPoint(e
+					.getPoint());
+			int columna = view.getTableRespuestas().columnAtPoint(e
+					.getPoint());
+			if ((fila > -1) && (columna > -1)) {
+
+				for (int i = 0; i < view.getTableRespuestas().getColumnCount(); i++) {
+					nombresdefila[i] = String.valueOf(view.getTableRespuestas().getValueAt(fila, i));
+	
+
+				}
+				idderespuesta=Integer.valueOf(nombresdefila[0]);
+				System.out.println(nombresdefila[0]);
+			}
+
+		}
+
+	};
+	
+	private void borrarPregunta() {
+		view.getBorrarPreguntas().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							model.borrarPregunta(iddepregunta);
+							view.ReCargarTablas();
+							view.getTablePreguntas().addMouseListener(ListenertablaPreguntas);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+						
+			}
+		});
+	}
+
+	
+	private void borrarRespuesta() {
+		view.getBorrarRespuestas().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							model.borrarRespuesta(idderespuesta);
+							view.ReCargarTablas();
+							view.getTableRespuestas().addMouseListener(ListenertablaRespuestas);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+						
+			}
+		});
+	}
+	
+	
+	private void modificarPregunta() {
+		view.getModificarPregunta().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							model.updatePregunta(mipregunta);
+							view.ReCargarTablas();
+							view.getTablePreguntas().addMouseListener(ListenertablaPreguntas);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});	
+			}
+		});
+	}
 
 }

@@ -90,4 +90,45 @@ public class HibernateHelper {
 		return last;
 		
 	}
+ 
+ public void  borrarRespuesta(int id){
+		Session session = sesion.openSession();
+		Transaction tx = session.beginTransaction();
+		Respuestas answer = (Respuestas) session.get(Respuestas.class, (int)id);	
+		if(answer!=null){
+			session.delete(answer);	
+			tx.commit();	
+		}
+		session.close();
+		
+	}
+ 
+ public void  borrarPregunta(int id){
+	 System.out.println("Borrando id "+id);
+		Session session = sesion.openSession();
+		Transaction tx = session.beginTransaction();
+		Preguntas answer = (Preguntas) session.get(Preguntas.class, id);	
+		if(answer!=null){
+			session.delete(answer);	
+			tx.commit();
+		
+		}
+
+		session.close();
+	}
+ 
+ 
+ public void  updatePregunta(Preguntas answer){
+		Session session = sesion.openSession();
+		Transaction tx = session.beginTransaction();
+		Preguntas answer1 = (Preguntas) session.get(Preguntas.class, answer);	
+		if(answer1!=null){
+			session.update(answer1);
+			tx.commit();
+		}
+		
+		session.close();
+		
+	}	
+ 
 }
