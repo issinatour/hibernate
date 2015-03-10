@@ -44,7 +44,7 @@ public class Controller {
 		actionsaveRespuesta();
 		borrarPregunta();
 		borrarRespuesta();
-		
+		modificarPregunta();
 		view.getTablePreguntas().addMouseListener(ListenertablaPreguntas);
 		view.getTableRespuestas().addMouseListener(ListenertablaRespuestas);
 	}
@@ -146,7 +146,7 @@ public class Controller {
 	
 
 				}
-				iddepregunta=Integer.valueOf(nombresdefila[0]);
+				 iddepregunta=Integer.valueOf(nombresdefila[0]);
 				 titulo=nombresdefila[1];
 				 categoria=nombresdefila[2];
 				 imagen=nombresdefila[3];
@@ -236,7 +236,7 @@ public class Controller {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							model.updatePregunta(mipregunta);
+							model.updatePreguntas(mipregunta,iddepregunta);
 							view.ReCargarTablas();
 							view.getTablePreguntas().addMouseListener(ListenertablaPreguntas);
 						} catch (Exception e) {

@@ -298,12 +298,12 @@ public class VentanaInsertar extends JFrame {
 
 		sesion = SessionFactoryUtil.getSessionFactory();
 
-		cargar();
+		cargarTablas();
 		
 	}
 
 
-		public void cargar() {
+		public void cargarTablas() {
 
 			DefaultTableModel modeloT = new DefaultTableModel();
 			 tablapreguntas = new JTable(modeloT);
@@ -355,7 +355,7 @@ public class VentanaInsertar extends JFrame {
 	
 
 	public void ReCargarTablas() {
-		cargar();
+		cargarTablas();
 	}
 
 	public JButton getbtninsertarPregunta() {

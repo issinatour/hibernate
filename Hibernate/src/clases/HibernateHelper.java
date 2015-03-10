@@ -5,6 +5,7 @@ import java.util.List;
 import model.Preguntas;
 import model.Respuestas;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -118,17 +119,33 @@ public class HibernateHelper {
 	}
  
  
- public void  updatePregunta(Preguntas answer){
-		Session session = sesion.openSession();
-		Transaction tx = session.beginTransaction();
-		Preguntas answer1 = (Preguntas) session.get(Preguntas.class, answer);	
-		if(answer1!=null){
-			session.update(answer1);
-			tx.commit();
-		}
-		
-		session.close();
-		
-	}	
+
+ 
+ public void updatePreguntas(Preguntas pregunta,int idpregunta ){
+     Session session = sesion.openSession();
+     Transaction tx = null;
+     try{
+
+        tx = session.beginTransaction();
+        // seleccinar la pregunta por el id
+        Preguntas actualizarmipregunta = (Preguntas)session.get(Preguntas.class, idpregunta); 
+        //actualizar pregunta recogida en el row de la tabla
+        actualizarmipregunta.setTitulo(pregunta.getTitulo());
+        actualizarmipregunta.setCategoria(pregunta.getCategoria());
+        actualizarmipregunta.setImagen(pregunta.getImagen());
+        actualizarmipregunta.setTipo(pregunta.getTipo());
+        actualizarmipregunta.setConsejo(pregunta.getConsejo());
+        
+        //update and commit cambios
+		 session.update(actualizarmipregunta); 
+        tx.commit();
+     }catch (HibernateException e) {
+        if (tx!=null) 
+        	tx.rollback();
+        e.printStackTrace(); 
+     }finally {
+        session.close(); 
+     }
+  }
  
 }
