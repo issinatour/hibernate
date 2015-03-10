@@ -1,10 +1,13 @@
 package controller;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.ColorUIResource;
 
 import clases.HibernateHelper;
 
@@ -13,6 +16,9 @@ public class Main {
 	 public static void main(String[] args) {
 		 try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel"); 
+			UIManager.getLookAndFeelDefaults().put("Panel.background", new Color(245, 245, 245));
+			UIManager.getLookAndFeelDefaults()
+	        .put("defaultFont", new Font("Serif",0, 13));
 			new Controller();
 			
 	

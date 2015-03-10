@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import model.Preguntas;
+import model.Respuestas;
 import clases.HibernateHelper;
 
 
@@ -28,6 +29,10 @@ public class Controller {
 	 
 	 Preguntas mipregunta;
 	////
+	 
+	 //Respuesta
+	 Respuestas mirespuesta;
+	 ////
 	
 	int iddepregunta=0;
 	int idderespuesta = 0;
@@ -45,6 +50,8 @@ public class Controller {
 		borrarPregunta();
 		borrarRespuesta();
 		modificarPregunta();
+		modificarRespuesta();
+		Refreshtables();
 		view.getTablePreguntas().addMouseListener(ListenertablaPreguntas);
 		view.getTableRespuestas().addMouseListener(ListenertablaRespuestas);
 	}
@@ -179,12 +186,36 @@ public class Controller {
 
 				}
 				idderespuesta=Integer.valueOf(nombresdefila[0]);
+				String titulorespuesta=nombresdefila[1];
+				boolean issolucion=Boolean.parseBoolean(nombresdefila[2]);
+				int idpreguntaseleecionadaderespuesta = Integer.valueOf(nombresdefila[3]);
+				mirespuesta = new Respuestas(titulorespuesta,issolucion,idpreguntaseleecionadaderespuesta);
+				
 				System.out.println(nombresdefila[0]);
 			}
 
 		}
 
 	};
+	
+	private void Refreshtables() {
+		view.getButtonRefresh().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							
+							view.ReCargarTablas();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+						
+			}
+		});
+	}
 	
 	private void borrarPregunta() {
 		view.getBorrarPreguntas().addActionListener(new ActionListener() {
@@ -248,4 +279,24 @@ public class Controller {
 		});
 	}
 
+	
+	private void modificarRespuesta() {
+		view.getModificarRespuesta().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							model.updateRespuestas(mirespuesta,idderespuesta);
+							view.ReCargarTablas();
+							view.getTableRespuestas().addMouseListener(ListenertablaRespuestas);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});	
+			}
+		});
+	}
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -29,6 +30,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.UIManager;
 
 import model.Preguntas;
 import model.Respuestas;
@@ -39,10 +41,12 @@ import org.hibernate.Transaction;
 
 import clases.HibernateHelper;
 import clases.SessionFactoryUtil;
+import clases.Utilities;
 
 import javax.swing.JCheckBox;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableModel;
 
 public class VentanaInsertar extends JFrame {
@@ -59,21 +63,23 @@ public class VentanaInsertar extends JFrame {
 	private JTextField textField;
 	JCheckBox checkTrueFalse;
 
-	
 	JButton btnBorrarPreguntas;
 	JButton btnBorrarRespuesta;
 	JScrollPane scrollPaneRespuestas;
 	HibernateHelper modelo;
+	Utilities utilidades;
 	JButton btnInsertarpregunta;
-	
+
 	JTable tablarespuestas;
 	JTable tablapreguntas;
 
-	
 	JButton btnModificarpregunta;
+	JButton btnModifrespuesta;
+	JButton btnrefresh;
 	public VentanaInsertar() {
-		
+
 		modelo = new HibernateHelper();
+		utilidades = new Utilities();
 		initialize();
 	}
 
@@ -81,12 +87,107 @@ public class VentanaInsertar extends JFrame {
 
 		setBounds(100, 100, 913, 481);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		setTitle("Ejercicio Hibernate por Issam Natour");
+	
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
+		JPanel panel = new JPanel();
+		tabbedPane.addTab("Ver datos", null, panel, null);
+		panel.setLayout(new BorderLayout(0, 0));
+
+		JPanel panel_18 = new JPanel();
+		panel.add(panel_18, BorderLayout.CENTER);
+		panel_18.setLayout(new GridLayout(1, 0, 0, 0));
+
+		JPanel panel_19 = new JPanel();
+		panel_18.add(panel_19);
+		panel_19.setLayout(new BorderLayout(0, 0));
+
+		scrollPanePreguntas = new JScrollPane();
+		panel_19.add(scrollPanePreguntas, BorderLayout.CENTER);
+
+		JLabel lblPreguntas = new JLabel("Preguntas");
+		lblPreguntas.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_19.add(lblPreguntas, BorderLayout.NORTH);
+
+		JPanel panel_21 = new JPanel();
+		panel_19.add(panel_21, BorderLayout.SOUTH);
+		panel_21.setLayout(new GridLayout(1, 0, 0, 0));
+
+		JPanel panel_22 = new JPanel();
+		panel_21.add(panel_22);
+		panel_22.setLayout(new GridLayout(1, 0, 0, 0));
+
+		btnModificarpregunta = new JButton("Modificar_Pregunta");
+		panel_22.add(btnModificarpregunta);
+
+		JPanel panel_23 = new JPanel();
+		panel_21.add(panel_23);
+
+		JPanel panel_24 = new JPanel();
+		panel_21.add(panel_24);
+
+		btnBorrarPreguntas = new JButton("Borrar");
+		panel_21.add(btnBorrarPreguntas);
+
+		JPanel panel_20 = new JPanel();
+		panel_18.add(panel_20);
+		panel_20.setLayout(new BorderLayout(0, 0));
+
+		scrollPaneRespuestas = new JScrollPane();
+		panel_20.add(scrollPaneRespuestas, BorderLayout.CENTER);
+
+		JLabel lblRespuestas = new JLabel("Respuestas");
+		lblRespuestas.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_20.add(lblRespuestas, BorderLayout.NORTH);
+
+		JPanel panel_25 = new JPanel();
+		panel_20.add(panel_25, BorderLayout.SOUTH);
+		panel_25.setLayout(new GridLayout(1, 0, 0, 0));
+
+		JPanel panel_26 = new JPanel();
+		panel_25.add(panel_26);
+		panel_26.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		 btnModifrespuesta = new JButton("Modif_Respuesta");
+		panel_26.add(btnModifrespuesta);
+
+		JPanel panel_27 = new JPanel();
+		panel_25.add(panel_27);
+
+		JPanel panel_28 = new JPanel();
+		panel_25.add(panel_28);
+
+		btnBorrarRespuesta = new JButton("Borrar");
+		panel_25.add(btnBorrarRespuesta);
+		
+		JPanel panel_34 = new JPanel();
+		panel.add(panel_34, BorderLayout.NORTH);
+		panel_34.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JPanel panel_30 = new JPanel();
+		panel_34.add(panel_30);
+		panel_30.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		JPanel panel_31 = new JPanel();
+		panel_30.add(panel_31);
+		
+		JPanel panel_32 = new JPanel();
+		panel_30.add(panel_32);
+		
+		JPanel panel_33 = new JPanel();
+		panel_30.add(panel_33);
+		
+		 btnrefresh = new JButton("Refresh");
+		 panel_30.add(btnrefresh);
+
+		JPanel panel_29 = new JPanel();
+		tabbedPane.addTab("Creaciones", null, panel_29, null);
+		panel_29.setLayout(new BorderLayout(0, 0));
+
 		JPanel panel_17 = new JPanel();
-		tabbedPane.addTab("Crear-insertar", null, panel_17, null);
+		panel_29.add(panel_17);
 		panel_17.setLayout(new GridLayout(1, 0, 0, 0));
 
 		JPanel panel_1 = new JPanel();
@@ -230,130 +331,67 @@ public class VentanaInsertar extends JFrame {
 		btnInsertarrespuesta = new JButton("InsertarRespuesta");
 		panel_16.add(btnInsertarrespuesta);
 
-		JPanel panel = new JPanel();
-		tabbedPane.addTab("Ver datos", null, panel, null);
-		panel.setLayout(new BorderLayout(0, 0));
-
-		JPanel panel_18 = new JPanel();
-		panel.add(panel_18, BorderLayout.CENTER);
-		panel_18.setLayout(new GridLayout(1, 0, 0, 0));
-
-		JPanel panel_19 = new JPanel();
-		panel_18.add(panel_19);
-		panel_19.setLayout(new BorderLayout(0, 0));
-
-		scrollPanePreguntas = new JScrollPane();
-		panel_19.add(scrollPanePreguntas, BorderLayout.CENTER);
-
-		JLabel lblPreguntas = new JLabel("Preguntas");
-		lblPreguntas.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_19.add(lblPreguntas, BorderLayout.NORTH);
-		
-		JPanel panel_21 = new JPanel();
-		panel_19.add(panel_21, BorderLayout.SOUTH);
-		panel_21.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JPanel panel_22 = new JPanel();
-		panel_21.add(panel_22);
-		panel_22.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		 btnModificarpregunta = new JButton("Modificar_Pregunta");
-		panel_22.add(btnModificarpregunta);
-		
-		JPanel panel_23 = new JPanel();
-		panel_21.add(panel_23);
-		
-		JPanel panel_24 = new JPanel();
-		panel_21.add(panel_24);
-		
-		 btnBorrarPreguntas = new JButton("Borrar");
-		panel_21.add(btnBorrarPreguntas);
-
-		JPanel panel_20 = new JPanel();
-		panel_18.add(panel_20);
-		panel_20.setLayout(new BorderLayout(0, 0));
-
-		scrollPaneRespuestas = new JScrollPane();
-		panel_20.add(scrollPaneRespuestas, BorderLayout.CENTER);
-
-		JLabel lblRespuestas = new JLabel("Respuestas");
-		lblRespuestas.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_20.add(lblRespuestas, BorderLayout.NORTH);
-		
-		JPanel panel_25 = new JPanel();
-		panel_20.add(panel_25, BorderLayout.SOUTH);
-		panel_25.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JPanel panel_26 = new JPanel();
-		panel_25.add(panel_26);
-		
-		JPanel panel_27 = new JPanel();
-		panel_25.add(panel_27);
-		
-		JPanel panel_28 = new JPanel();
-		panel_25.add(panel_28);
-		
-		 btnBorrarRespuesta = new JButton("Borrar");
-		panel_25.add(btnBorrarRespuesta);
-
 		sesion = SessionFactoryUtil.getSessionFactory();
 
 		cargarTablas();
-		
+
 	}
 
+	public void cargarTablas() {
 
-		public void cargarTablas() {
+		DefaultTableModel modeloT = new DefaultTableModel();
+		tablapreguntas = new JTable(modeloT);
 
-			DefaultTableModel modeloT = new DefaultTableModel();
-			 tablapreguntas = new JTable(modeloT);
-			
-			modeloT.addColumn("idpregunta");
-			modeloT.addColumn("titulo");
-			modeloT.addColumn("categoria");
-			modeloT.addColumn("imagen");
-			modeloT.addColumn("tipo");
-			modeloT.addColumn("consejo");
-			
-		
-			DefaultTableModel modeloTRespuestas = new DefaultTableModel();
-			tablarespuestas = new JTable(modeloTRespuestas);
-			
-			modeloTRespuestas.addColumn("idRespuestas");
-			modeloTRespuestas.addColumn("respuesta");
-			modeloTRespuestas.addColumn("solucion");
-			modeloTRespuestas.addColumn("idPreguntas");
+		modeloT.addColumn("idpregunta");
+		modeloT.addColumn("titulo");
+		modeloT.addColumn("categoria");
+		modeloT.addColumn("imagen");
+		modeloT.addColumn("tipo");
+		modeloT.addColumn("consejo");
 
-			List<Preguntas> Listapreguntas = modelo.getQuestion();
-			List<Respuestas> Listarespuestas = modelo.getRespuestas();
-
-			for (Preguntas s : Listapreguntas) {
-				Object[] o = new Object[6];
-				o[0] = s.getIdPreguntas();
-				o[1] = s.getTitulo();
-				o[2] = s.getCategoria();
-				o[3] = s.getImagen();
-				o[4] = s.getTipo();
-				o[5] = s.getConsejo();
-
-				modeloT.addRow(o);
-			}
-
-			for (Respuestas s : Listarespuestas) {
-				Object[] o = new Object[4];
-				o[0] = s.getIdRespuestas();
-				o[1] = s.getRespuesta();
-				o[2] = s.getSolucion();
-				o[3] = s.getIdPreguntas();
-
-				modeloTRespuestas.addRow(o);
-			}
-
-			scrollPanePreguntas.setViewportView(tablapreguntas);
-			scrollPaneRespuestas.setViewportView(tablarespuestas);
-		}
+		DefaultTableModel modeloTRespuestas = new DefaultTableModel();
+		tablarespuestas = new JTable(modeloTRespuestas);
 	
+		modeloTRespuestas.addColumn("idRespuestas");
+		modeloTRespuestas.addColumn("respuesta");
+		modeloTRespuestas.addColumn("solucion");
+		modeloTRespuestas.addColumn("idPreguntas");
 
+		List<Preguntas> Listapreguntas = modelo.getQuestion();
+		List<Respuestas> Listarespuestas = modelo.getRespuestas();
+
+		for (Preguntas s : Listapreguntas) {
+			Object[] o = new Object[6];
+			o[0] = s.getIdPreguntas();
+			o[1] = s.getTitulo();
+			o[2] = s.getCategoria();
+			o[3] = s.getImagen();
+			o[4] = s.getTipo();
+			o[5] = s.getConsejo();
+
+			modeloT.addRow(o);
+		}
+
+		for (Respuestas s : Listarespuestas) {
+			Object[] o = new Object[4];
+			o[0] = s.getIdRespuestas();
+			o[1] = s.getRespuesta();
+			o[2] = s.getSolucion();
+			o[3] = s.getIdPreguntas();
+
+			modeloTRespuestas.addRow(o);
+		}
+		
+		utilidades.ajustartabla(tablapreguntas);
+		utilidades.ajustartabla(tablarespuestas);
+		
+		scrollPanePreguntas.setViewportView(tablapreguntas);
+		scrollPaneRespuestas.setViewportView(tablarespuestas);
+	}
+
+	
+	
+	
 	public void ReCargarTablas() {
 		cargarTablas();
 	}
@@ -397,24 +435,32 @@ public class VentanaInsertar extends JFrame {
 	public JTextField getIDPREGUNTA() {
 		return textField;
 	}
-	
-	public JButton getBorrarPreguntas(){
+
+	public JButton getBorrarPreguntas() {
 		return btnBorrarPreguntas;
 	}
-	
-	public JButton getBorrarRespuestas(){
+
+	public JButton getBorrarRespuestas() {
 		return btnBorrarRespuesta;
 	}
-	
-	public JTable getTablePreguntas(){
+
+	public JTable getTablePreguntas() {
 		return tablapreguntas;
 	}
-	
-	public JTable getTableRespuestas(){
+
+	public JTable getTableRespuestas() {
 		return tablarespuestas;
 	}
-	
-	public JButton getModificarPregunta(){
+
+	public JButton getModificarPregunta() {
 		return btnModificarpregunta;
+	}
+	
+	public JButton getModificarRespuesta(){
+		return btnModifrespuesta;
+	}
+	
+	public JButton getButtonRefresh(){
+		return btnrefresh;
 	}
 }

@@ -148,4 +148,30 @@ public class HibernateHelper {
      }
   }
  
+ 
+ public void updateRespuestas(Respuestas respuesta,int idrespuesta){
+     Session session = sesion.openSession();
+     Transaction tx = null;
+     try{
+
+        tx = session.beginTransaction();
+        // seleccinar la respuesta por el id
+        System.out.println(respuesta);
+        Respuestas actualizarmirespuesta = (Respuestas)session.get(Respuestas.class, idrespuesta); 
+        //actualizar respuesta recogida en el row de la tabla
+        actualizarmirespuesta.setRespuesta(respuesta.getRespuesta());
+        actualizarmirespuesta.setSolucion(respuesta.getSolucion());
+        actualizarmirespuesta.setIdPreguntas(respuesta.getIdPreguntas());
+        //update and commit cambios
+		 session.update(actualizarmirespuesta); 
+        tx.commit();
+     }catch (HibernateException e) {
+        if (tx!=null) 
+        	tx.rollback();
+        e.printStackTrace(); 
+     }finally {
+        session.close(); 
+     }
+  }
+ 
 }
