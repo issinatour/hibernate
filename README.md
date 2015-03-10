@@ -1,5 +1,7 @@
 # hibernate
 
+Ejercicio Hibernate + Swing java con MVC
+
 -Ver datos actuales en JTables + actualizar en cambios y botton
 
 -Insertar preguntas y respuestas mediante hibernate
